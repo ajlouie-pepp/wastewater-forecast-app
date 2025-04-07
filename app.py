@@ -36,7 +36,7 @@ gpd_option = st.sidebar.radio("Choose a Scenario:",
                               ["Conservative", "Moderate", "Aggressive", "Custom"])
 
 if gpd_option == "Conservative":
-    gpd_per_sfd = 130
+    gpd_per_sfd = 114
 elif gpd_option == "Moderate":
     gpd_per_sfd = 157
 elif gpd_option == "Aggressive":
