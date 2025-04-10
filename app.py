@@ -1,6 +1,7 @@
 
 import streamlit as st
 import pandas as pd
+import altair as alt 
 
 def forecast_sfd_wastewater(SFD_0, growth_rate, gpd_per_sfd, years, trigger_threshold=2.78):
     forecast = []
@@ -48,8 +49,20 @@ st.sidebar.markdown(f"**Selected GPD per SFD:** `{gpd_per_sfd}`")
 
 results_df, trigger_year = forecast_sfd_wastewater(SFD_0, growth_rate, gpd_per_sfd, years, trigger_threshold)
 
+# 🔧 Convert Year to string to prevent comma formatting in Altair
+results_df["Year"] = results_df["Year"].astype(str)
+
+# Chart
 st.subheader("📊 Wastewater Forecast (MGD)")
-st.line_chart(results_df.set_index("Year")["Wastewater_MGD"])
+chart = alt.Chart(results_df).mark_line().encode(
+    x=alt.X('Year:O', axis=alt.Axis(format='d', title='Year')),  # format='d' removes the comma
+    y=alt.Y('Wastewater_MGD', title='Wastewater (MGD)')
+).properties(
+    width=800,
+    height=400
+)
+
+st.altair_chart(chart, use_container_width=True)
 
 st.subheader("📄 Forecast Table")
 st.dataframe(results_df)
